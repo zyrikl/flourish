@@ -26,6 +26,7 @@ Then simply run `flourish ./ 3000` inside the directory you created `main.fsh` i
 Building from source (POSIX systems):
 ```
 git clone https://github.com/zyrikl/flourish.git
+cd ./flourish
 make build
 ```
 Even building from source is that easy!
