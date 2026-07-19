@@ -5,10 +5,10 @@
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cerr << "Usage: flourish [directory] [port (optional, default=3000)]";
+        std::cerr << "Usage: flourish [directory] [port (optional, default=3000)]" << std::endl;
         return 1;
     } else if (argc == 2) {
-        create_server(argv[1], 3000);
+        create_server(argv[1], 8080);
         return 0;
     } else {
         create_server(argv[1], std::stoi(argv[2]));

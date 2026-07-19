@@ -7,25 +7,25 @@ Go to our [Getting started](#getting-started "Getting started") portion to downl
 body {
     div #first-project {
         h1 "My First Project"
-        echo "This is a Flourish project."
+        p "This is a Flourish project."
     }
 }
 
 // Styles
-style {
+style "
     #first-project {
         background: blue;
         color: white;
         padding: 10px;
     }
-}
+"
 ```
-Then simply run `flourish run 3000` inside the directory you created `main.fsh` in. This creates a port on `localhost:3000` (`:8080` is the default when run without `3000`). It should display `main.fsh` as a web file.
+Then simply run `flourish ./ 3000` inside the directory you created `main.fsh` in. This creates a port on `localhost:3000` (`:8080` is the default when run without `3000`). It should display `main.fsh` as a web file.
 
 ## Getting started
 Building from source (POSIX systems):
 ```
-git clone https://github.com/zyrikl/flourish/
+git clone https://github.com/zyrikl/flourish.git
 make build
 ```
 Even building from source is that easy!
