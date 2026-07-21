@@ -12,6 +12,10 @@ enum tt {
     LEFT_BRACE,
     RIGHT_BRACE,
 
+    // Variable constructors
+    LET, EQUALS, EQUALS_EQUALS,
+    VARIABLE,
+
     // Other necessary constructors
     ECHO, NEWLINE, EOF_TOKEN
 };

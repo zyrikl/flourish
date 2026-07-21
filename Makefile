@@ -29,3 +29,9 @@ clean:
 hello:
 	make
 	./flourish ./src/tests/hello-world/ 3000
+var:
+	make
+	./flourish ./src/tests/variables/ 3000
+zyrikl:
+	make
+	./flourish ./src/tests/zyrikl/ 3000
