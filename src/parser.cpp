@@ -135,7 +135,6 @@ std::string Parser::tag_node() {
     std::vector<std::string> classes;
     bool con = true;
     bool done_id = false;
-    //d
     if (
         current_token.literal == "area" ||
         current_token.literal == "base" ||
