@@ -24,7 +24,7 @@ struct Token {
     tt type;
     std::string literal;
 
-    Token(tt type, std::string literal);
+    Token(tt type = EOF_TOKEN, std::string literal = "eof");
 };
 
 std::vector<Token> token_stream(std::string fn);

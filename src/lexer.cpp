@@ -38,7 +38,7 @@ std::vector<Token> token_stream(std::string fn) {
                 }
                 break;
             case '\n':
-                tokens.push_back(Token(NEWLINE, std::string(1, c)));
+                //tokens.push_back(Token(NEWLINE, std::string(1, c)));
                 break;
             case ' ':
             case '\t':
@@ -154,7 +154,6 @@ std::vector<Token> token_stream(std::string fn) {
                     }
                     // otherwise it's a tag
                     else {
-                        // Assume it's a tag
                         tokens.push_back(Token(TAG, contents.substr(start, current - start)));
                     }
                 } else if (c != '=') {

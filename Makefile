@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -I./src/includes
+CXXFLAGS = -std=c++23 -I./src/includes
 
 # very messy sources thingy
 SRCS := main.cpp $(shell find ./src -type f -name "*.cpp")
@@ -21,6 +21,7 @@ install:
 build:
 	make
 	make install
+#	make clean
 
 clean:
 	rm -f $(OBJS) $(TARGET)

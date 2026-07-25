@@ -1,8 +1,7 @@
-let x = "0"
-body {
-    let y = "0"
-    y = "1"
-    p {
-        x y
-    }
+let x = "asdf"
+p x
+div #header {
+    button "asdf"
+    hr
+    button "sadf"
 }

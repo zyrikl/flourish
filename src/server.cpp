@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <cstdio>
 #include "server.h"
 #include "parser.h"
 
@@ -20,7 +21,8 @@ std::string get_mime_type(const std::string& path) {
     if (path.ends_with(".html")) return "text/html";
     if (path.ends_with(".css")) return "text/css";
     if (path.ends_with(".js")) return "application/javascript";
-    if (path.ends_with(".jpg") || path.ends_with(".jpeg")) return "image/jpeg";
+    if (path.ends_with(".jpg")
+     || path.ends_with(".jpeg")) return "image/jpeg";
     if (path.ends_with(".png")) return "image/png";
     if (path.ends_with(".fsh")) return "text/html";
     return "text/plain";
@@ -42,13 +44,14 @@ void handle_client(int client_sock, std::string dir) {
     }
 
     // fallback
-    if (path == "/") path = "/main.fsh";
+    if (path.ends_with("/")) path = path+"main.fsh";
 
     fs::path file_path = dir + path;
     
     if (fs::exists(file_path) && !fs::is_directory(file_path)) {
         std::string mime_type = get_mime_type(file_path.string());
-        std::string content = get_content(file_path);
+        Parser p(file_path);
+        std::string content = p.get_content();
         
         std::ostringstream response_header;
         response_header << "HTTP/1.1 200 OK\r\n"
@@ -70,32 +73,38 @@ void create_server(const std::string& dir, int port) {
     const std::string PUBLIC_DIR = dir;
     const int PORT = port;
 
-    fs::create_directory(PUBLIC_DIR); // backup in case dir doesn't exist
-    std::cout << "Serving files from: " << fs::absolute(PUBLIC_DIR) << "\n";
+    fs::path p = PUBLIC_DIR;
+    p /= "main.fsh";
+    if (fs::is_directory(PUBLIC_DIR) && fs::exists(p)) {
+        std::cout << "Serving files from: " << fs::absolute(PUBLIC_DIR) << "\n";
 
-    int server_sock = socket(AF_INET, SOCK_STREAM, 0);
-    int opt = 1;
-    setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+        int server_sock = socket(AF_INET, SOCK_STREAM, 0);
+        int opt = 1;
+        setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
-    sockaddr_in address;
-    address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(PORT);
+        sockaddr_in address;
+        address.sin_family = AF_INET;
+        address.sin_addr.s_addr = INADDR_ANY;
+        address.sin_port = htons(PORT);
 
-    bind(server_sock, (struct sockaddr*)&address, sizeof(address));
-    listen(server_sock, 10);
+        bind(server_sock, (struct sockaddr*)&address, sizeof(address));
+        listen(server_sock, 10);
 
-    std::cout << "Server listening on port " << PORT << "...\n";
+        std::cout << "Server listening on port " << PORT << "...\n";
 
-    while (true) {
-        sockaddr_in client_address;
-        socklen_t addr_len = sizeof(client_address);
-        int client_sock = accept(server_sock, (struct sockaddr*)&client_address, &addr_len);
-        
-        if (client_sock >= 0) {
-            handle_client(client_sock, PUBLIC_DIR);
+        while (true) {
+            sockaddr_in client_address;
+            socklen_t addr_len = sizeof(client_address);
+            int client_sock = accept(server_sock, (struct sockaddr*)&client_address, &addr_len);
+            
+            if (client_sock >= 0) {
+                handle_client(client_sock, PUBLIC_DIR);
+            }
         }
-    }
 
-    close(server_sock);
+        close(server_sock);
+    } else {
+        std::cerr << "Unable to handle the request.\n";
+        std::exit(1);
+    }
 }
