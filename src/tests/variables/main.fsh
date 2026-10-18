@@ -1,7 +1,9 @@
-let x = "asdf"
-p x
-div #header {
-    button "asdf"
-    hr
-    button "sadf"
+body {
+    let x = p .asdf "asdfasdf"
+    div #header {
+        button "asdf"
+        hr
+        button "sadf"
+    }
+    x x x
 }
