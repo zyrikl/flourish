@@ -22,7 +22,8 @@
         current_token.literal == "source" ||
         current_token.literal == "track" ||
         current_token.literal == "wbr" ||
-        current_token.literal == "param")*/
+        current_token.literal == "param"
+    )*/
 
 Parser::Parser(std::string fn) : fn(fn) {
     html = "<!DOCTYPE html><html>";
@@ -95,9 +96,8 @@ std::string Parser::handle_token() {
                             current += 2;
                             break;
                         case TAG:
-                            current++; //skip equals
-                            current_token = tokens[current++];
-                            vars[current_token.literal] = tag_node();
+                            current++; // skip equals
+                            vars[current_token.literal] = tag_node(tokens[current++]);
                             break;
                         default:
                             break;
@@ -106,12 +106,13 @@ std::string Parser::handle_token() {
                     if (vars.contains(current_token.literal)) {
                         rval += vars[current_token.literal];
                     } else {
+                        std::cerr << "Warning: variables should be initialized.\n";
                         vars[current_token.literal] = "";
                     }
                 }
                 break;
             case TAG: 
-                rval += tag_node();
+                rval += tag_node(current_token);
                 break;
             case LET:
                 break;
@@ -130,26 +131,26 @@ std::string Parser::handle_token() {
     return rval;
 }
 
-std::string Parser::tag_node() {
-    std::string rval = "<"+current_token.literal;
+std::string Parser::tag_node(Token t) {
+    std::string rval = "<"+t.literal;
     std::vector<std::string> classes;
     bool con = true;
     bool done_id = false;
     if (
-        current_token.literal == "area" ||
-        current_token.literal == "base" ||
-        current_token.literal == "br" ||
-        current_token.literal == "col" ||
-        current_token.literal == "embed" ||
-        current_token.literal == "hr" ||
-        current_token.literal == "img" ||
-        current_token.literal == "input" ||
-        current_token.literal == "link" ||
-        current_token.literal == "meta" ||
-        current_token.literal == "source" ||
-        current_token.literal == "track" ||
-        current_token.literal == "wbr" ||
-        current_token.literal == "param"
+        t.literal == "area" ||
+        t.literal == "base" ||
+        t.literal == "br" ||
+        t.literal == "col" ||
+        t.literal == "embed" ||
+        t.literal == "hr" ||
+        t.literal == "img" ||
+        t.literal == "input" ||
+        t.literal == "link" ||
+        t.literal == "meta" ||
+        t.literal == "source" ||
+        t.literal == "track" ||
+        t.literal == "wbr" ||
+        t.literal == "param"
     ) {
         while (con) {
             Token next_token = tokens[current++];
@@ -249,7 +250,7 @@ std::string Parser::tag_node() {
                         rval += "\"";
                     }
 
-                    rval += ">"+next_token.literal+"</"+current_token.literal+">";
+                    rval += ">"+next_token.literal+"</"+t.literal+">";
 
                     con = false;
                     break;
@@ -266,7 +267,7 @@ std::string Parser::tag_node() {
                     }
 
                     if (vars.contains(next_token.literal)) {
-                        rval += ">"+vars[next_token.literal]+"</"+current_token.literal+">";
+                        rval += ">"+vars[next_token.literal]+"</"+t.literal+">";
                     } else {
                         std::cerr << "Variable "+next_token.literal+" not assigned value.\n";
                         std::exit(1);
@@ -287,7 +288,7 @@ std::string Parser::tag_node() {
                     }
                     rval += ">";
 
-                    offenders.push_back(current_token.literal);
+                    offenders.push_back(t.literal);
                     rval += handle_token();
                     break;
                 case RIGHT_BRACE:
@@ -316,7 +317,7 @@ std::string Parser::tag_node() {
 
 std::string Parser::get_content() {
     if (fn.ends_with(".fsh")) {
-        for (Token token : tokens) {
+        /*for (Token token : tokens) {
             switch (token.type) {
                 case TAG:
                     std::cout << "TAG:"+token.literal+", ";
@@ -344,7 +345,7 @@ std::string Parser::get_content() {
                     break;
             }
         }
-        std::cout << std::endl;
+        std::cout << std::endl;*/
         html += handle_token();
         html += "</html>";
         return html;

@@ -20,7 +20,7 @@ style "
     }
 "
 ```
-Then simply run `flourish ./ 3000` inside the directory you created `main.fsh` in. This creates a port on `localhost:3000` (`:8080` is the default when run without `3000`). It should display `main.fsh` as a web file.
+Then simply run `flourish run 3000` inside the directory you created `main.fsh` in. This creates a port on `localhost:3000` (`:8080` is the default when run without `3000`). It should display `main.fsh` as a web file.
 
 ## Getting started
 Building from source (POSIX systems):
@@ -28,5 +28,6 @@ Building from source (POSIX systems):
 git clone https://github.com/zyrikl/flourish.git
 cd ./flourish
 make build
+cd ../
 ```
 Even building from source is that easy!

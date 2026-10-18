@@ -44,7 +44,13 @@ void handle_client(int client_sock, std::string dir) {
     }
 
     // fallback
-    if (path.ends_with("/")) path = path+"main.fsh";
+    if (fs::is_directory(fs::path(path))) {
+        if (path.ends_with('/')) {
+            path = path + "main.fsh";
+        } else {
+            path = path + "/main.fsh";
+        }
+    }
 
     fs::path file_path = dir + path;
     
